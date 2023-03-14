@@ -18,7 +18,7 @@ module OpenRouteServiceApi
     def call
       resp = send_post_request
 
-      raise(OpenRouteServiceApi::RouteSearchError) if resp.body.empty?
+      raise(OpenRouteServiceApi::RouteSearchError) if JSON.parse(resp.code) != 200 || resp.body.empty?
 
       segments = JSON.parse(resp.body)['routes'][0]['segments']
       commute_segment = segments[0]

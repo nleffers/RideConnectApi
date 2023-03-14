@@ -69,6 +69,15 @@ RSpec.describe Ride, type: :request do
             ]
           }.to_json
         end
+        let(:coordinates_stub_bad) do
+          {
+            coordinates: [
+              [Driver.current.home_longitude, Driver.current.home_latitude],
+              [nil, described_class.first.start_latitude],
+              [described_class.first.destination_longitude, described_class.first.destination_latitude]
+            ]
+          }.to_json
+        end
         let(:route_first_response) do
           {
             routes: [
@@ -128,11 +137,23 @@ RSpec.describe Ride, type: :request do
           expect(results.count).to eq(2)
           expect(results.first['score']).to be >= results.last['score']
         end
+
+        it 'returns a 400 when OpenRouteService Directions Service fails' do
+          described_class.first.update(start_longitude: nil)
+
+          stub_request(:post, 'https://api.openrouteservice.org/v2/directions/driving-car')
+            .with(body: coordinates_stub_bad, headers:)
+            .to_return(status: 400, headers:)
+
+          get '/rides/search_open_rides'
+
+          expect(response.code).to eq('400')
+        end
       end
     end
 
     context 'when Driver is not logged in', :create_five_rides do
-      it 'returns an error' do
+      it 'returns a 401' do
         get '/rides/search_open_rides'
 
         expect(response.code).to eq('401')
