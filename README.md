@@ -36,13 +36,15 @@ You can start the rails server using the command given below.
 
 And now you can visit the site with the URL http://localhost:3000
 
+---
+
 ## API Endpoints
 
 #### Note: Drivers must be logged in to access the following endpoints
 
 ### Get List of Open Rides
 
-##### Return a list of open rides available to a driver
+##### - Returns a list of open rides available to a driver
 
 #### Request
 
@@ -55,6 +57,7 @@ And now you can visit the site with the URL http://localhost:3000
   {
     id: 1,
     score: 25
-  }
+  },
+  ...
 ]
 ```
