@@ -68,13 +68,7 @@ RSpec.describe Driver do
     end
   end
 
-  context 'when calling Driver.current' do
-    let(:driver) { create(:driver) }
-
-    it 'gets the current driver' do
-      expect(described_class.current).to be_nil
-      described_class.current = driver
-      expect(described_class.current).to be(driver)
-    end
+  context 'when home_location is called' do
+    it_behaves_like 'location_helper', 'home'
   end
 end

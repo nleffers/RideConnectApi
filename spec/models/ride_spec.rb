@@ -97,91 +97,6 @@ RSpec.describe Ride do
     end
   end
 
-  describe "when getting a Ride's score" do
-    let(:full_params) do
-      params.merge(
-        {
-          start_latitude: '39.278829',
-          start_longitude: '-76.622703',
-          destination_latitude: '33.953414',
-          destination_longitude: '-118.339026'
-        }
-      )
-    end
-    let(:ride) { described_class.create(full_params) }
-
-    context 'when the score is stored in Redis' do
-      before do
-        allow(Driver).to receive(:current).and_return create(:driver)
-        Rails.cache.write("driver_#{Driver.current.id}_ride_#{ride.id}", 5, expires_in: 5.minutes)
-      end
-
-      after do
-        Rails.cache.clear
-      end
-
-      it 'gets a score from Redis cache if one exists' do
-        allow(ride).to receive(:calculate_and_cache_score)
-
-        score = ride.score
-
-        expect(score).to eq(5)
-        expect(ride).not_to have_received(:calculate_and_cache_score)
-      end
-    end
-
-    context 'when the score is not stored in Redis' do
-      let(:route_params) do
-        {
-          coordinates: [
-            ['-76.620795', '39.285217'],
-            ['-76.622703', '39.278829'],
-            ['-118.339026', '33.953414']
-          ]
-        }.to_json
-      end
-      let(:route_headers) do
-        {
-          'Accept' => '*/*',
-          'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
-          'Authorization' => api_key,
-          'Content-Type' => 'application/json',
-          'Host' => 'api.openrouteservice.org',
-          'User-Agent' => 'Ruby'
-        }
-      end
-      let(:route_response) do
-        {
-          routes: [
-            {
-              segments: [
-                {
-                  distance: 977.8,
-                  duration: 125.0
-                },
-                {
-                  distance: 4_264_799.0,
-                  duration: 153_889.2
-                }
-              ]
-            }
-          ]
-        }.to_json
-      end
-
-      before { allow(Driver).to receive(:current).and_return create(:driver) }
-
-      it 'calls the API and stores the score in Redis' do
-        stub_request(:post, 'https://api.openrouteservice.org/v2/directions/driving-car')
-          .with(body: route_params, headers: route_headers)
-          .to_return(body: route_response, status: 200, headers: route_headers)
-
-        score = ride.score
-        expect(score).to eq(134)
-      end
-    end
-  end
-
   context 'when Ride.open_rides is called' do
     before { create_list(:ride, 5) }
 
@@ -194,5 +109,13 @@ RSpec.describe Ride do
 
       expect(described_class.open_rides.count).to eq(4)
     end
+  end
+
+  context 'when start_location is called' do
+    it_behaves_like 'location_helper', 'start'
+  end
+
+  context 'when destination_location is called' do
+    it_behaves_like 'location_helper', 'destination'
   end
 end

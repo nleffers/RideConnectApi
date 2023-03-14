@@ -5,24 +5,24 @@ module RideScoreHelper
   private
 
   # Base function used to calculate a Ride's score and cache it into Redis
-  def calculate_and_cache_score
-    ride_info = route_search
+  def calculate_and_cache_score(ride)
+    ride_info = route_search(ride)
 
     ride_distance = ride_info[:ride_distance] * 0.00062137
     commute_duration = ride_info[:commute_duration] / 60
     ride_duration = ride_info[:ride_duration] / 60
 
     score = calculate_score(ride_distance, ride_duration, commute_duration)
-    cache_score(score)
+    cache_score(score, ride.id)
 
     score
   end
 
   # Get Ride's route information using OpenRouteService Directions Service
-  def route_search
-    OpenRouteServiceApi::RouteSearch.new(Driver.current.home_location,
-                                         start_location,
-                                         destination_location).call
+  def route_search(ride)
+    OpenRouteServiceApi::RouteSearch.new(driver.home_location,
+                                         ride.start_location,
+                                         ride.destination_location).call
   end
 
   # Calculate Ride score
@@ -42,7 +42,13 @@ module RideScoreHelper
 
   # Cache Ride score in Redis and set an expiration time so data can eventually be updated
   # Redis key personalized to current Driver, as commute info - and thus the Ride score - is personalized to the Driver
-  def cache_score(score)
-    Rails.cache.write("driver_#{Driver.current.id}_ride_#{id}", score, expires_in: 2.minutes)
+  def cache_score(score, ride_id)
+    Rails.cache.write("driver_#{driver_params[:driver_id]}_ride_#{ride_id}", score, expires_in: 2.minutes)
+  end
+
+  # Find given Driver
+  # Raises ActiveRecord::RecordNotFound if Driver doesn't exist
+  def driver
+    Driver.find(driver_params[:driver_id])
   end
 end

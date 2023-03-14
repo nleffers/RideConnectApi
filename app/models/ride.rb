@@ -1,7 +1,6 @@
 # Model that represents Ride object
 class Ride < ApplicationRecord
   include LocationHelper
-  include RideScoreHelper
 
   belongs_to :driver, optional: true
 
@@ -11,13 +10,6 @@ class Ride < ApplicationRecord
   # List of Rides not already associated with a Driver
   def self.open_rides
     where(driver_id: nil)
-  end
-
-  # Ride's score for the logged in Driver
-  # Checks Redis for an already existing score first.
-  # If the score is not already cached, then calculate and cache it for later lookups
-  def score
-    Rails.cache.read("driver_#{Driver.current.id}_ride_#{id}") || calculate_and_cache_score
   end
 
   # Ride's starting location information
