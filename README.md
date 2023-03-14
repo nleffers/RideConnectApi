@@ -41,7 +41,7 @@ And now you can visit the site with the URL http://localhost:3000
 
 ## API Endpoints
 
-#### Note: Drivers must be logged in to access the following endpoints
+#### Note: Drivers must be logged in to use the following endpoints
 
 ### Get List of Open Rides
 
