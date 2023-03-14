@@ -50,7 +50,7 @@ And now you can visit the site with the URL http://localhost:3000
 
 #### Request
 
-`GET /rides/search\_open\_rides`
+`GET /rides/search_open_rides`
 
 #### Response
 
