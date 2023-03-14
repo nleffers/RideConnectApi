@@ -15,30 +15,25 @@ This API uses the OpenRouteService API to get Location and Route information
 
 ##### 1. Clone repository
 
-```bash
-git clone git@github.com:nleffers/hop_skip_drive_api.git
-```
+    git clone git@github.com:nleffers/hop_skip_drive_api.git
 
 ##### 2. Install
 
-```bash
-bundle install
-```
+    gem install bundler
+    bundle install
 
 ##### 3. Create and setup the database
 
 Run the following commands to create and setup the database.
 
-```ruby
-bundle exec rake db:create
-bundle exec rake db:migrate
-```
+    rails db:create
+    rails db:migrate
 
 ##### 4. Start the Rails server
 
 You can start the rails server using the command given below.
 
-    bundle exec rails s
+    rails s
 
 And now you can visit the site with the URL http://localhost:3000
 
