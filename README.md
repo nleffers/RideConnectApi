@@ -3,8 +3,8 @@
 The setups steps expect following tools installed on the system.
 
 - Github
-- Ruby [3.2.1](https://github.com/organization/project-name/blob/master/.ruby-version#L1)
-- Rails [7.0.4.2](https://github.com/organization/project-name/blob/master/Gemfile#L12)
+- Ruby 3.2.1
+- Rails 7.0.4.2
 
 ##### 1. Check out the repository
 
@@ -12,24 +12,16 @@ The setups steps expect following tools installed on the system.
 git clone git@github.com:nleffers/hopskipdrive_assessment.git
 ```
 
-##### 2. Create database.yml file
-
-Copy the sample database.yml file and edit the database configuration as required.
-
-```bash
-cp config/database.yml.sample config/database.yml
-```
-
-##### 3. Create and setup the database
+##### 2. Create and setup the database
 
 Run the following commands to create and setup the database.
 
 ```ruby
 bundle exec rake db:create
-bundle exec rake db:setup
+bundle exec rake db:migrate
 ```
 
-##### 4. Start the Rails server
+##### 3. Start the Rails server
 
 You can start the rails server using the command given below.
 
