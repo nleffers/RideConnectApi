@@ -32,9 +32,7 @@ bundle exec rake db:migrate
 
 You can start the rails server using the command given below.
 
-```ruby
-bundle exec rails s
-```
+    bundle exec rails s
 
 And now you can visit the site with the URL http://localhost:3000
 
@@ -44,12 +42,19 @@ And now you can visit the site with the URL http://localhost:3000
 
 ### Get List of Open Rides
 
+##### Return a list of open rides available to a driver
+
 #### Request
 
-##### GET /rides/search\_open\_rides
+`GET /rides/search\_open\_rides`
 
 #### Response
 
-```bash
-[{ id: 1, score: 25 }]
+```ruby
+[
+  {
+    id: 1,
+    score: 25
+  }
+]
 ```
