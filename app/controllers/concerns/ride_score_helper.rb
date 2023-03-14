@@ -13,9 +13,9 @@ module RideScoreHelper
   def calculate_and_cache_score(ride)
     ride_info = route_search(ride)
 
-    ride_distance = ride_info[:ride_distance] * 0.00062137
-    commute_duration = ride_info[:commute_duration] / 60
-    ride_duration = ride_info[:ride_duration] / 60
+    ride_distance = convert_meters_to_miles(ride_info[:ride_distance])
+    commute_duration = convert_seconds_to_minutes(ride_info[:commute_duration])
+    ride_duration = convert_seconds_to_minutes(ride_info[:ride_duration])
 
     score = calculate_score(ride_distance, ride_duration, commute_duration)
     cache_score(score, ride.id)
@@ -55,5 +55,15 @@ module RideScoreHelper
   # Raises ActiveRecord::RecordNotFound if Driver doesn't exist
   def driver
     Driver.find(driver_params[:driver_id])
+  end
+
+  # converts meters to miles
+  def convert_meters_to_miles(meters)
+    meters * 0.00062137
+  end
+
+  # converts seconds to minutes
+  def convert_seconds_to_minutes(seconds)
+    seconds / 60
   end
 end
