@@ -1,7 +1,7 @@
 # Model that represents Ride object
 class Ride < ApplicationRecord
   include AddressHelper
-  include ScoreHelper
+  include RideScoreHelper
 
   belongs_to :driver, optional: true
 

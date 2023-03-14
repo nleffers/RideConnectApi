@@ -1,5 +1,5 @@
 # Contains methods used to calculate a Ride's score
-module ScoreHelper
+module RideScoreHelper
   extend ActiveSupport::Concern
 
   private
