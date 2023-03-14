@@ -14,8 +14,8 @@ module RideScoreHelper
     ride_info = route_search(ride)
 
     ride_distance = convert_meters_to_miles(ride_info[:ride_distance])
-    commute_duration = convert_seconds_to_minutes(ride_info[:commute_duration])
-    ride_duration = convert_seconds_to_minutes(ride_info[:ride_duration])
+    commute_duration = scale_time(ride_info[:commute_duration])
+    ride_duration = scale_time(ride_info[:ride_duration])
 
     score = calculate_score(ride_distance, ride_duration, commute_duration)
     cache_score(score, ride.id)
@@ -33,7 +33,7 @@ module RideScoreHelper
   # Calculate Ride score
   def calculate_score(ride_distance, ride_duration, commute_duration)
     ride_earnings = calculate_ride_earnings(ride_distance, ride_duration)
-    (ride_earnings / ((commute_duration + ride_duration) / 60)).to_i
+    (ride_earnings / scale_time(commute_duration + ride_duration)).to_i
   end
 
   # Calculate Ride potential earnings
@@ -62,8 +62,8 @@ module RideScoreHelper
     meters * 0.00062137
   end
 
-  # converts seconds to minutes
-  def convert_seconds_to_minutes(seconds)
-    seconds / 60
+  # converts seconds into minutes and minutes into hours
+  def scale_time(time)
+    time / 60
   end
 end
