@@ -1,17 +1,17 @@
 # Controller for Rides
 class RidesController < ApplicationController
-  # And lots of rspec tests. But this won't be too bad. Just glad I didn't wait until Tuesday to start this.
-  # Oh, and I need to write the markdown for how the API works.
-  # And leave good comments.
-  # And implement good error handling.
+  # Returns a list of rides sorted by their scores in relation to the current Driver
   def search_open_rides
-    # get open rides
+    # Check that Driver is logged in
+    raise(Driver::NotLoggedInError) unless Driver.current
+
+    # Get open rides
     rides = Ride.open_rides
 
-    # get each ride's score
+    # Get each ride's score
     ride_scores = get_ride_scores(rides)
 
-    # sort results by score, best to worst
+    # Sort results by score, best to worst
     ride_scores.sort! { |a, b| b[:score] <=> a[:score] }
 
     render json: ride_scores, status: :ok

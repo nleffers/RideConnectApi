@@ -1,4 +1,4 @@
-RSpec.describe Ride, type: :request do
+RSpec.describe Ride do
   describe 'GET /search_open_rides' do
     let(:api_key) { Rails.application.credentials.open_route_service.api_key }
 
@@ -14,14 +14,14 @@ RSpec.describe Ride, type: :request do
       context 'when ride scores are stored in Redis', :create_five_rides do
         before do
           described_class.all.each_with_index do |ride, index|
-            Rails.cache.write(ride.id, index % 3, expires_in: 5.seconds)
+            Rails.cache.write("driver_#{Driver.current.id}_ride_#{ride.id}", index % 3, expires_in: 5.seconds)
           end
         end
 
         it 'returns all rides sorted by their scores' do
           get '/rides/search_open_rides'
 
-          results = JSON.parse(response.body)
+          results = response.parsed_body
           expect(results.count).to eq(5)
           expect(results.first['score']).to be >= results.last['score']
         end
@@ -32,7 +32,7 @@ RSpec.describe Ride, type: :request do
           described_class.first.update(driver: new_driver)
           get '/rides/search_open_rides'
 
-          results = JSON.parse(response.body)
+          results = response.parsed_body
           expect(results.count).to eq(4)
           expect(results.first['score']).to be >= results.last['score']
         end
@@ -124,16 +124,16 @@ RSpec.describe Ride, type: :request do
             .to_return(body: route_last_response, status: 200, headers:)
 
           described_class.all.each do |ride|
-            expect(Rails.cache.read(ride.id).present?).to be(false)
+            expect(Rails.cache.read("driver_#{Driver.current.id}_ride_#{ride.id}").present?).to be(false)
           end
 
           get '/rides/search_open_rides'
 
           described_class.all.each do |ride|
-            expect(Rails.cache.read(ride.id).present?).to be(true)
+            expect(Rails.cache.read("driver_#{Driver.current.id}_ride_#{ride.id}").present?).to be(true)
           end
 
-          results = JSON.parse(response.body)
+          results = response.parsed_body
           expect(results.count).to eq(2)
           expect(results.first['score']).to be >= results.last['score']
         end

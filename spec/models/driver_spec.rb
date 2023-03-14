@@ -1,4 +1,4 @@
-RSpec.describe Driver, type: :model do
+RSpec.describe Driver do
   let(:api_key) { Rails.application.credentials.open_route_service.api_key }
 
   it { is_expected.to have_many(:rides) }
@@ -52,8 +52,8 @@ RSpec.describe Driver, type: :model do
 
       driver = described_class.create(params)
 
-      expect(driver.home_latitude).not_to eq(nil)
-      expect(driver.home_longitude).not_to eq(nil)
+      expect(driver.home_latitude).not_to be_nil
+      expect(driver.home_longitude).not_to be_nil
     end
 
     it 'fails when a location is missing' do
@@ -72,9 +72,9 @@ RSpec.describe Driver, type: :model do
     let(:driver) { create(:driver) }
 
     it 'gets the current driver' do
-      expect(described_class.current).to eq(nil)
+      expect(described_class.current).to be_nil
       described_class.current = driver
-      expect(described_class.current).to eq(driver)
+      expect(described_class.current).to be(driver)
     end
   end
 end

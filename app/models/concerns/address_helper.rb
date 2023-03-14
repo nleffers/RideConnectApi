@@ -4,6 +4,7 @@ module AddressHelper
 
   private
 
+  # Used by Driver and Ride to get location information
   def location(prefix)
     {
       address: send("#{prefix}_address"),
@@ -15,6 +16,7 @@ module AddressHelper
     }
   end
 
+  # Update latitude/longitude using OpenRouteServiceApi::LocationSearch
   def update_lat_long(prefix)
     return if send("#{prefix}_latitude") && send("#{prefix}_longitude")
 
@@ -26,6 +28,7 @@ module AddressHelper
     }
   end
 
+  # Check if latitude/longitude are already present
   def lat_long_present?(prefix)
     send("#{prefix}_latitude").present? && send("#{prefix}_longitude").present?
   end

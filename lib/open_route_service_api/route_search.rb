@@ -15,10 +15,10 @@ module OpenRouteServiceApi
       @destination_location = destination_location
     end
 
+    # Get commute and ride info from OpenRouteService Directions Service
     def call
       resp = send_post_request
-
-      raise(OpenRouteServiceApi::RouteSearchError) if JSON.parse(resp.code) != 200 || resp.body.empty?
+      check_response_for_error(resp)
 
       segments = JSON.parse(resp.body)['routes'][0]['segments']
       commute_segment = segments[0]
@@ -33,6 +33,7 @@ module OpenRouteServiceApi
 
     private
 
+    # Make the POST request to the API
     def send_post_request
       uri = URI(API_ENDPOINT)
 
@@ -43,6 +44,7 @@ module OpenRouteServiceApi
       https.request(req)
     end
 
+    # Set up the POST request
     def https_request(uri)
       req = Net::HTTP::Post.new(uri)
       req.content_type = 'application/json'
@@ -52,6 +54,7 @@ module OpenRouteServiceApi
       req
     end
 
+    # Parameters needed for the POST request
     def params
       {
         coordinates: [
@@ -60,6 +63,13 @@ module OpenRouteServiceApi
           [destination_location[:longitude], destination_location[:latitude]]
         ]
       }
+    end
+
+    # Raise error if POST request was unsuccessful
+    def check_response_for_error(resp)
+      return if JSON.parse(resp.code) == 200 && resp.body.present?
+
+      raise(OpenRouteServiceApi::RouteSearchError)
     end
   end
 end

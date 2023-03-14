@@ -13,10 +13,11 @@ module OpenRouteServiceApi
       @location = location
     end
 
+    # Get location information from OpenRouteService Geocode Services
     def call
       resp = send_get_request
 
-      check_response_for_error(JSON.parse(resp.code))
+      check_response_for_error(resp.code)
 
       coordinates = JSON.parse(resp.body)['features'][0]['geometry']['coordinates']
       {
@@ -27,12 +28,14 @@ module OpenRouteServiceApi
 
     private
 
+    # Make the GET request to the API
     def send_get_request
       uri = URI(API_ENDPOINT)
       uri.query = URI.encode_www_form(params)
       Net::HTTP.get_response(uri)
     end
 
+    # Parameters needed for the GET request
     def params
       {
         api_key: Rails.application.credentials.open_route_service.api_key,
@@ -43,8 +46,9 @@ module OpenRouteServiceApi
       }
     end
 
+    # Raise error if GET request was unsuccessful
     def check_response_for_error(status_code)
-      return if status_code == 200
+      return if JSON.parse(status_code) == 200
 
       raise(OpenRouteServiceApi::LocationSearchError, status_code)
     end

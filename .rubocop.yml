@@ -3,7 +3,7 @@ require:
   - rubocop-rspec
 
 AllCops:
-  DisplayCopName: true
+  NewCops: enable
   Include:
     - '**/*.rb'
     - '**/Gemfile'

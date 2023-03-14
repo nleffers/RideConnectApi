@@ -1,4 +1,4 @@
-RSpec.describe Ride, type: :model do
+RSpec.describe Ride do
   let(:api_key) { Rails.application.credentials.open_route_service.api_key }
   let(:params) do
     {
@@ -112,7 +112,8 @@ RSpec.describe Ride, type: :model do
 
     context 'when the score is stored in Redis' do
       before do
-        Rails.cache.write(ride.id, 5, expires_in: 5.minutes)
+        allow(Driver).to receive(:current).and_return create(:driver)
+        Rails.cache.write("driver_#{Driver.current.id}_ride_#{ride.id}", 5, expires_in: 5.minutes)
       end
 
       after do
