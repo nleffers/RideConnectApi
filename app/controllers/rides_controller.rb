@@ -32,6 +32,7 @@ class RidesController < ApplicationController
     end
   end
 
+  # Whitelist parameters
   def driver_params
     params.permit(:driver_id)
   end
