@@ -1,11 +1,15 @@
-# HopSkipDrive API
+# HopSkipDriveApi
+
+HopSkipDriveApi enables drivers to select the best rides for them from all rides available.
 
 ## Prerequisites
 
-The setups steps expect following tools installed on the system.
+This setup uses the following tools:
 
 - Ruby 3.2.1
 - Rails 7.0.4.2
+
+This API uses the OpenRouteService API to get Location and Route information
 
 ## Installation
 
