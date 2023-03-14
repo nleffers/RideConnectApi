@@ -99,7 +99,7 @@ RSpec.describe OpenRouteServiceApi::RouteSearch do
       ).to eq(expected_call_response)
     end
 
-    it 'raises RouteSearchError' do
+    it 'raises RouteSearchError when any coordinate is missing' do
       stub_request(:post, 'https://api.openrouteservice.org/v2/directions/driving-car')
         .with(body: empty_params, headers:)
         .to_return(body: '', status: 200, headers:)

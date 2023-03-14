@@ -4,6 +4,11 @@ module RideScoreHelper
 
   private
 
+  # Get Ride's score for given driver either from Redis cache or a calculation
+  def ride_score(ride)
+    Rails.cache.read("driver_#{driver_params[:driver_id]}_ride_#{ride.id}") || calculate_and_cache_score(ride)
+  end
+
   # Base function used to calculate a Ride's score and cache it into Redis
   def calculate_and_cache_score(ride)
     ride_info = route_search(ride)

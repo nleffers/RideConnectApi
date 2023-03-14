@@ -32,11 +32,6 @@ class RidesController < ApplicationController
     end
   end
 
-  # Get Ride's score for given driver either from Redis cache or a calculation
-  def ride_score(ride)
-    Rails.cache.read("driver_#{driver_params[:driver_id]}_ride_#{ride.id}") || calculate_and_cache_score(ride)
-  end
-
   def driver_params
     params.permit(:driver_id)
   end
