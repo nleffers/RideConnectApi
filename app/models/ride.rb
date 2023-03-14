@@ -14,7 +14,8 @@ class Ride < ApplicationRecord
   end
 
   # Ride's score for the logged in Driver
-  # Checks Redis for an already existing score
+  # Checks Redis for an already existing score first.
+  # If the score is not already cached, then calculate and cache it for later lookups
   def score
     Rails.cache.read("driver_#{Driver.current.id}_ride_#{id}") || calculate_and_cache_score
   end
