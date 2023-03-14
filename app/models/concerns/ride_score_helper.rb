@@ -41,6 +41,7 @@ module RideScoreHelper
   end
 
   # Cache Ride score in Redis and set an expiration time so data can eventually be updated
+  # Redis key personalized to current Driver, as commute info - and thus the Ride score - is personalized to the Driver
   def cache_score(score)
     Rails.cache.write("driver_#{Driver.current.id}_ride_#{id}", score, expires_in: 2.minutes)
   end
