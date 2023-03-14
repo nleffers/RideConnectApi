@@ -143,9 +143,17 @@ RSpec.describe Ride do
           .with(body: coordinates_stub_bad, headers:)
           .to_return(status: 400, headers:)
 
-        get '/rides/search_open_rides'
+        get '/rides/search_open_rides', params: { driver_id: driver.id }
 
         expect(response.code).to eq('400')
+      end
+    end
+
+    context 'when Driver does not exist', :create_five_rides do
+      it 'returns a 404' do
+        get '/rides/search_open_rides', params: { driver_id: driver.id + 1 }
+
+        expect(response.code).to eq('404')
       end
     end
   end

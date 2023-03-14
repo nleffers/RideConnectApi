@@ -14,8 +14,10 @@ class RidesController < ApplicationController
     ride_scores.sort! { |a, b| b[:score] <=> a[:score] }
 
     render json: ride_scores, status: :ok
-  rescue OpenRouteServiceApi::RouteSearchError, ActiveRecord::RecordNotFound
+  rescue OpenRouteServiceApi::RouteSearchError
     head :bad_request
+  rescue ActiveRecord::RecordNotFound
+    head :not_found
   end
 
   private
