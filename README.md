@@ -7,7 +7,9 @@ The setups steps expect following tools installed on the system.
 - Ruby 3.2.1
 - Rails 7.0.4.2
 
-##### Installation
+## Installation
+
+##### 1. Clone repository
 
 ```bash
 git clone git@github.com:nleffers/hop_skip_drive_api.git
