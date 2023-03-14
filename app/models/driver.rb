@@ -1,6 +1,6 @@
 # Model that represents Driver object
 class Driver < ApplicationRecord
-  include AddressHelper
+  include LocationHelper
 
   has_many :rides, dependent: :restrict_with_exception
 

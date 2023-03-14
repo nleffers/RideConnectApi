@@ -1,5 +1,5 @@
-# Address Helper
-module AddressHelper
+# Location Helper
+module LocationHelper
   extend ActiveSupport::Concern
 
   private
