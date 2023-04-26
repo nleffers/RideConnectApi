@@ -1,6 +1,6 @@
-# HopSkipDriveApi
+# DriveConnectorApi
 
-HopSkipDriveApi enables drivers to select the best rides for them from all rides available.
+DriveConnectorApi enables drivers to select the best rides for them from all rides available.
 
 ## Prerequisites
 
